@@ -9,6 +9,7 @@ PSP_MAIN_THREAD_ATTR(THREAD_ATTR_VFPU | THREAD_ATTR_USER);
 #define BUFFER_WIDTH 512
 #define SCREEN_WIDTH 480
 #define SCREEN_HEIGHT 272
+#define BRICKS_SIZE 112
 
 char list[0x20000] __attribute__((aligned(64)));
 
@@ -117,29 +118,29 @@ int main()
 
     initGu();
 
-    Rectangle bricks[72];
+    Rectangle bricks[BRICKS_SIZE];
 
-    int positionX = 8;
+    int positionX;
     int positionY = 20;
 
     int initialIndex = 0;
-    int actualLenght = 9;
+    int actualLenght = 14;
 
     for (int i = 0; i < 8; i++)
     {
-        positionX = 8;
+        positionX = 2;
 
         for (int j = initialIndex; j < actualLenght; j++)
         {
-            Rectangle actualBrick = {positionX, positionY, 48, 8, 0};
+            Rectangle actualBrick = {positionX, positionY, 32, 8, 0};
 
             bricks[j] = actualBrick;
 
-            positionX += 52;
+            positionX += 34;
         }
 
-        initialIndex += 9;
-        actualLenght += 9;
+        initialIndex += 14;
+        actualLenght += 14;
 
         positionY += 10;
     }
@@ -182,7 +183,7 @@ int main()
         if (hasCollision(player, ball))
             ballVelocityY *= -1;
 
-        for (unsigned int i = 0; i < 72; i++)
+        for (unsigned int i = 0; i < BRICKS_SIZE; i++)
         {
             if (!bricks[i].isDestroyed && hasCollision(bricks[i], ball))
             {
@@ -196,7 +197,7 @@ int main()
 
         startFrame();
 
-        for (unsigned int i = 0; i < 72; i++)
+        for (unsigned int i = 0; i < BRICKS_SIZE; i++)
         {
             if (!bricks[i].isDestroyed)
                 drawRect(bricks[i].x, bricks[i].y, bricks[i].w, bricks[i].h); 
