@@ -14,7 +14,7 @@ PSP_LARGE_MEMORY = 1
 LIBS = -lpspgu -lpspge -lpspdisplay -lpspctrl
 
 EXTRA_TARGETS = EBOOT.PBP
-PSP_EBOOT_TITLE = My First App
+PSP_EBOOT_TITLE = Breakout
 #PSP_EBOOT_ICON = ICON0.PNG
 
 PSPSDK=$(shell psp-config --pspsdk-path)
