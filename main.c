@@ -3,45 +3,14 @@
 #include <pspdisplay.h>
 #include <pspctrl.h>
 #include "exit_callback.h" 
+#include "psp_graphics.h"
 
 PSP_MODULE_INFO("gutest", 0, 1, 0);
 PSP_MAIN_THREAD_ATTR(THREAD_ATTR_VFPU | THREAD_ATTR_USER);
 
-#define BUFFER_WIDTH 512
-#define SCREEN_WIDTH 480
-#define SCREEN_HEIGHT 272
 #define BRICKS_SIZE 112
 
 char list[0x20000] __attribute__((aligned(64)));
-
-void initGu()
-{
-    sceGuInit();
-
-    sceGuStart(GU_DIRECT, list);
-    sceGuDrawBuffer(GU_PSM_8888, (void *)0, BUFFER_WIDTH);
-    sceGuDispBuffer(SCREEN_WIDTH, SCREEN_HEIGHT, (void *)0x88000, BUFFER_WIDTH);
-    sceGuDepthBuffer((void *)0x110000, BUFFER_WIDTH);
-
-    sceGuOffset(2048 - (SCREEN_WIDTH / 2), 2048 - (SCREEN_HEIGHT / 2));
-    sceGuViewport(2048, 2048, SCREEN_WIDTH, SCREEN_HEIGHT);
-    sceGuEnable(GU_SCISSOR_TEST);
-    sceGuScissor(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-    sceGuDepthRange(65535, 0); 
-
-    sceGuDepthFunc(GU_GEQUAL); 
-    sceGuEnable(GU_DEPTH_TEST); 
-
-    sceGuFinish();
-    sceGuDisplay(GU_TRUE);
-}
-
-void endGu()
-{
-    sceGuDisplay(GU_FALSE);
-    sceGuTerm();
-}
 
 void startFrame()
 {
@@ -95,7 +64,7 @@ int main()
 {
     setup_callbacks();
 
-    initGu();
+    initGu(list);
 
     Rectangle bricks[BRICKS_SIZE];
 
@@ -192,6 +161,5 @@ int main()
     }
 
     endGu();
-
     return 0;
 }

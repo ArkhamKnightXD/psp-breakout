@@ -3,7 +3,6 @@
 
 #include <pspkernel.h>
 
-//These 3 functions are for setting up the exit button.
 static inline int exit_callback(int arg1, int arg2, void *common) {
     sceKernelExitGame();
     return 0;
