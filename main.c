@@ -33,7 +33,7 @@ typedef struct
     short x, y, z;
 } Vertex;
 
-void drawRect(float x, float y, float w, float h)
+void drawRect(float x, float y, float w, float h, unsigned int color)
 {
     Vertex *vertices = (Vertex *)sceGuGetMemory(2 * sizeof(Vertex));
 
@@ -43,7 +43,7 @@ void drawRect(float x, float y, float w, float h)
     vertices[1].x = x + w;
     vertices[1].y = y + h;
 
-    sceGuColor(0xFFFFFFFF); 
+    sceGuColor(color); 
     sceGuDrawArray(GU_SPRITES, GU_TEXTURE_16BIT | GU_VERTEX_16BIT | GU_TRANSFORM_2D, 2, 0, vertices);
 }
 
@@ -52,6 +52,7 @@ typedef struct
     int x, y;
     int w, h;
     _Bool isDestroyed;
+    unsigned int color;
 } Rectangle;
 
 _Bool hasCollision(Rectangle bounds, Rectangle ball)
@@ -80,7 +81,14 @@ int main()
 
         for (int j = initialIndex; j < actualLenght; j++)
         {
-            Rectangle actualBrick = {positionX, positionY, 32, 8, 0};
+            //blue color
+            unsigned int color = 0xFFFFFF00;
+
+            //red color
+            if (i % 2 == 0)
+                color = 0xFF0000FF;
+
+            Rectangle actualBrick = {positionX, positionY, 32, 8, 0, color};
 
             bricks[j] = actualBrick;
 
@@ -148,12 +156,12 @@ int main()
         for (unsigned int i = 0; i < BRICKS_SIZE; i++)
         {
             if (!bricks[i].isDestroyed)
-                drawRect(bricks[i].x, bricks[i].y, bricks[i].w, bricks[i].h); 
+                drawRect(bricks[i].x, bricks[i].y, bricks[i].w, bricks[i].h, bricks[i].color); 
         }
 
-        drawRect(player.x, player.y, player.w, player.h);
+        drawRect(player.x, player.y, player.w, player.h, 0xFFFFFFFF);
 
-        drawRect(ball.x, ball.y, ball.w, ball.h);
+        drawRect(ball.x, ball.y, ball.w, ball.h, 0xFFFFFFFF);
 
         endFrame();
 
