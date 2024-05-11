@@ -1,4 +1,4 @@
-TARGET = TUTORIAL
+TARGET = BREAKOUT
 OBJS = main.o exit_callback.o psp_graphics.o
 
 CFLAGS = 
