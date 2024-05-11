@@ -1,51 +1,11 @@
-#include <pspkernel.h>
-#include <pspgu.h>
-#include <pspdisplay.h>
 #include <pspctrl.h>
 #include "exit_callback.h" 
 #include "psp_graphics.h"
 
-PSP_MODULE_INFO("gutest", 0, 1, 0);
-PSP_MAIN_THREAD_ATTR(THREAD_ATTR_VFPU | THREAD_ATTR_USER);
-
 #define BRICKS_SIZE 112
 
-char list[0x20000] __attribute__((aligned(64)));
-
-void startFrame()
-{
-    sceGuStart(GU_DIRECT, list);
-    sceGuClearColor(0x00000000); 
-    sceGuClear(GU_COLOR_BUFFER_BIT);
-}
-
-void endFrame()
-{
-    sceGuFinish();
-    sceGuSync(0, 0);
-    sceDisplayWaitVblankStart();
-    sceGuSwapBuffers();
-}
-
-typedef struct
-{
-    unsigned short u, v;
-    short x, y, z;
-} Vertex;
-
-void drawRect(float x, float y, float w, float h, unsigned int color)
-{
-    Vertex *vertices = (Vertex *)sceGuGetMemory(2 * sizeof(Vertex));
-
-    vertices[0].x = x;
-    vertices[0].y = y;
-
-    vertices[1].x = x + w;
-    vertices[1].y = y + h;
-
-    sceGuColor(color); 
-    sceGuDrawArray(GU_SPRITES, GU_TEXTURE_16BIT | GU_VERTEX_16BIT | GU_TRANSFORM_2D, 2, 0, vertices);
-}
+PSP_MODULE_INFO("gutest", 0, 1, 0);
+PSP_MAIN_THREAD_ATTR(THREAD_ATTR_VFPU | THREAD_ATTR_USER);
 
 typedef struct
 {
@@ -65,7 +25,7 @@ int main()
 {
     setup_callbacks();
 
-    initGu(list);
+    initGu();
 
     Rectangle bricks[BRICKS_SIZE];
 
@@ -101,7 +61,7 @@ int main()
         positionY += 10;
     }
 
-    Rectangle player = {SCREEN_WIDTH / 2, SCREEN_HEIGHT - 16, 48, 8};
+    Rectangle player = {SCREEN_WIDTH / 2, SCREEN_HEIGHT - 16, 42, 8};
 
     Rectangle ball = {SCREEN_WIDTH / 2 - 12, SCREEN_HEIGHT / 2 - 12, 12, 12};
 
@@ -119,7 +79,7 @@ int main()
         if (pad.Buttons & PSP_CTRL_LEFT && player.x > 0)
             player.x -= playerSpeed;
 
-        else if (pad.Buttons & PSP_CTRL_RIGHT && player.x < SCREEN_WIDTH - 48)
+        else if (pad.Buttons & PSP_CTRL_RIGHT && player.x < SCREEN_WIDTH - player.w)
             player.x += playerSpeed;
 
         if (ball.y > SCREEN_HEIGHT + 12)

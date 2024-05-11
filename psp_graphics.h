@@ -11,9 +11,15 @@
 #include <pspdisplay.h>
 
 //boilerplate code for setting up the psp graphics.
-void initGu(char *list);
+void initGu();
 
 // closing psp graphics.
 void endGu();
+
+void startFrame();
+
+void endFrame();
+
+void drawRect(float x, float y, float w, float h, unsigned int color);
 
 #endif /* PSP_GRAPHICS_H */
