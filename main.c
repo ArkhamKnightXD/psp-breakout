@@ -2,17 +2,17 @@
 #include "exit_callback.h" 
 #include "psp_graphics.h"
 
-#define BRICKS_SIZE 112
-
 PSP_MODULE_INFO("BREAKOUT", 0, 1, 0);
 PSP_MAIN_THREAD_ATTR(THREAD_ATTR_VFPU | THREAD_ATTR_USER);
+
+const unsigned int BRICKS_SIZE = 112; 
 
 typedef struct
 {
     int x, y;
     int w, h;
     _Bool isDestroyed;
-    unsigned int color;
+    unsigned int color; 
 } Rectangle;
 
 _Bool hasCollision(Rectangle bounds, Rectangle ball)
@@ -67,8 +67,8 @@ int main()
 
     int playerSpeed = 6;
 
-    int ballVelocityX = 4;
-    int ballVelocityY = 4;
+    int ballVelocityX = 3;
+    int ballVelocityY = 3;
 
     SceCtrlData pad;
 
@@ -124,8 +124,6 @@ int main()
         drawRect(ball.x, ball.y, ball.w, ball.h, 0xFFFFFFFF);
 
         endFrame();
-
-        sceKernelDelayThread(10000);
     }
 
     endGu();
