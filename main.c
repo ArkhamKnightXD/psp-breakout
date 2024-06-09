@@ -90,13 +90,10 @@ int main()
             ballVelocityX *= -1;
         }
 
-        if (ball.y < 0)
-            ballVelocityY *= -1;
-
         if (ball.x < 0 || ball.x > SCREEN_WIDTH - 12)
             ballVelocityX *= -1;
 
-        if (hasCollision(player, ball))
+        if (hasCollision(player, ball) || ball.y < 0)
             ballVelocityY *= -1;
 
         for (unsigned int i = 0; i < BRICKS_SIZE; i++)
